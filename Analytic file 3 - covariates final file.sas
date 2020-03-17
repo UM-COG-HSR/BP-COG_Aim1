@@ -1,3 +1,4 @@
+
 /************************************************************************************************************
 * Program: Analytic File 3 - covariates final file.SAS            											*
 * Folder: S:\Intmed_Rsrch2\GenMed\Restricted\BP COG\Aim 1\Data Management\Data\Freeze2020_Master\SAS Progs  *
@@ -8,9 +9,9 @@
 *************************************************************************************************************/
 
 /* Please provide info about this repository */
-%let repo_name = BP-COG_Data_Freeze_MasterFile; /* Repository name on GitHub */
+%let repo_name = BP-COG_Aim1; /* Repository name on GitHub */
 %let repo_maintainer = Nick Tilton;
-%let repo_description = SAS repository for the 2020 freeze of the masterlong dataset;
+%let repo_description = Create analytic file for Aim 1 and run models for all individual projects (Black vs. White, Hispanic vs. White, Male vs. Female);
 
 %put repo_name := &repo_name;  /* Github Repository name */
 
@@ -54,6 +55,7 @@ filename fx "&SAS_work_dir/_load_repo_assets.inc";
 %let ExclusPath = &BPCOGpath.\Aim 1\Data Management\Data\Freeze2020_Master\SAS Exclusions;
 %let CogPath = &BPCOGpath.\Aim 1\Data Management\Data\Freeze2020_Master\SAS Cognitive Data;
 %let MemPath = &BPCOGpath.\Aim 1\Data Management\Data;
+%let CohortPath = &BPCOGpath.\Original Cohort Files;
 
 libname frz "&MasterPath";
 libname mem "&MemPath";
@@ -62,6 +64,12 @@ libname intm "&IntrmdPath";
 libname anls "&AnalysPath";
 libname cog "&CogPath";
 libname excl "&ExclusPath";
+libname ARIC "&CohortPath.\ARIC\SAS Files";
+libname CARDIA "&CohortPath.\CARDIA\SAS Files";
+libname CHS "&CohortPath.\CHS\SAS Files";
+libname FOS "&CohortPath.\FOS\SAS Files";
+libname MESA "&CohortPath.\MESA\SAS Files";
+libname NOMAS "&CohortPath.\NOMAS\SAS Files";
 
 options fmtsearch=(fmts) nofmterr;
 
@@ -386,10 +394,13 @@ mc1=nmiss(age0,racebpcog,female0,educ,alccat,smoke,physact,
 bmi,waistcm,hxafib,glucosef,cholldl,htntx,coginspanish);
 mc2=nmiss(age0,racebpcog,female0,educ,alccat,smoke,physact,
 bmi,waistcm,hxafib,glucosef,cholldl,htntx,englishprof);
+mc3=nmiss(age0,racebpcog,female0,educ,smoke,physact, /* ~25% of MESA are missing alcohol use */
+bmi,waistcm,hxafib,glucosef,cholldl,htntx,coginspanish);
 cmplt1=(mc1=0);
 cmplt2=(mc2=0);
+cmplt3=(mc3=0);
 keep newid mean_sbp_all mean_dbp_all gcp studyname age0 racebpcog female0 educ alccat smoke physact 
-bmi waistcm hxafib glucosef cholldl htntx fuptime exf mem mc1 mc2 cmplt1 cmplt2 ngcp nexf nmem coginspanish englishprof;
+bmi waistcm hxafib glucosef cholldl htntx fuptime exf mem mc1 mc2 cmplt1 cmplt2 cmplt3 ngcp nexf nmem coginspanish englishprof;
 run;
 
 proc sort data=mcovs out=mc_t (keep=newid mc1 mc2 cmplt1 cmplt2); by newid; 
@@ -590,4 +601,3 @@ run;
 proc datasets library=work memtype=data nolist kill;
 run;
 quit;
-
