@@ -9,9 +9,9 @@
 *************************************************************************************************************/
 
 /* Please provide info about this repository */
-%let repo_name = BP-COG_Data_Freeze_MasterFile; /* Repository name on GitHub */
+%let repo_name = BP-COG_Aim1; /* Repository name on GitHub */
 %let repo_maintainer = Nick Tilton;
-%let repo_description = SAS repository for the 2020 freeze of the masterlong dataset;
+%let repo_description = Create analytic file for Aim 1 and run models for all individual projects (Black vs. White, Hispanic vs. White, Male vs. Female);
 
 %put repo_name := &repo_name;  /* Github Repository name */
 
