@@ -96,7 +96,7 @@ options fmtsearch=(fmts) nofmterr;
 
 libname sr "&OutputPath.\SAS Results";
 
-%let alist = cardia chs fos nomas mesa &ty &racevar female0 age0med10 &racevar*&ty age0med10*&ty female0*&ty educ1 educ2 educ3 educ4 alc1 alc2 alc3 smoke bmimed waistcmmed cholldlmed10 glucosefmed10 physact hxafib ;
+%let alist = cardia chs fos nomas mesa &ty &racevar female0 age0med10 &racevar*&ty age0med10*&ty female0*&ty educ1 educ2 educ3 educ4 smoke bmimed waistcmmed cholldlmed10 glucosefmed10 physact hxafib ;
 %let blist = sbp120m sbp120m*&ty ;
 %let clist = htntx htntx*&ty ;
 
@@ -108,7 +108,7 @@ class newid;
 %if &model = B %then %do; model &dvar = &alist &blist / s cl; %end;
 %if &model = C %then %do; model &dvar = &alist &blist &clist / s cl; %end;
 random int &ty / subject=newid type=un;
-where strokeinc=0 and cmplt1=1 and n&dvar >= 1 and &samp = 1;
+where strokeinc=0 and cmplt3=1 and n&dvar >= 1 and &samp = 1;
 ods output ParameterEstimates=sr.&dvar._mod&model._&ymd;
 run;
 ods rtf close;
